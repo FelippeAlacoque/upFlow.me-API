@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.upflow.documents.Usuario;
+import com.upflow.exception.UsuarioException;
 import com.upflow.response.Response;
 import com.upflow.service.UsuarioService;
 
@@ -40,7 +41,7 @@ public class UsuarioController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<Response<Usuario>> cadastrar(@Valid @RequestBody Usuario usuario, BindingResult result){
+	public ResponseEntity<Response<Usuario>> cadastrar(@Valid @RequestBody Usuario usuario, BindingResult result) throws UsuarioException{
 		if(result.hasErrors()) {
 			List<String> listaErros = new ArrayList<String>();
 			result.getAllErrors().forEach(erro -> listaErros.add(erro.getDefaultMessage()));

@@ -3,7 +3,6 @@ package com.upflow.documents;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
-import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -42,7 +41,6 @@ public class Usuario {
 	
 	@NotEmpty(message = "E-mail do usuário é obrigatório.")
 	@Email(message="E-mail inválido. O E-mail deverá ter o formato exemplo@exemplo.com")
-	@UniqueElements(message="Já existe um usuário cadastrado com o e-mail informado.")
 	public String getEmail() {
 		return email;
 	}
@@ -51,7 +49,6 @@ public class Usuario {
 	}
 	
 	@NotEmpty(message = "Login é obrigatório")
-	@UniqueElements(message = "Já existe um usuário cadastrado com o login informado.")
 	public String getLogin() {
 		return login;
 	}
