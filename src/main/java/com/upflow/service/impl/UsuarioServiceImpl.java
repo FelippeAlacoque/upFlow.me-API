@@ -29,7 +29,8 @@ public class UsuarioServiceImpl implements UsuarioService {
 
 	@Override
 	public Usuario cadastrar(Usuario usuario) throws UsuarioException {
-		validarUsuarioSemelhante(usuario);				
+		validarUsuarioSemelhante(usuario);		
+		validarSenha(usuario.getSenha());
 		return this.usuarioRepository.save(usuario);
 	}
 
@@ -49,6 +50,11 @@ public class UsuarioServiceImpl implements UsuarioService {
 			if(user.getEmail().equalsIgnoreCase(usuario.getEmail()) || user.getLogin().equalsIgnoreCase(usuario.getLogin()))
 				throw new UsuarioException("Já existe um usuário cadastrado com o login e/ou e-mail informados.");
 		}					
+	}
+	
+	private void validarSenha(String senha) throws UsuarioException {
+		if(senha.length() <6)
+			throw new UsuarioException("A senha informada deve possuir no mínimo 6 dígitos");
 	}
 
 }
