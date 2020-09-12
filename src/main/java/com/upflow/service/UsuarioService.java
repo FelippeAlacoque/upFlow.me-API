@@ -16,6 +16,9 @@ public interface UsuarioService {
 	
 	Usuario atualizar (Usuario usuario);
 	
+	Usuario buscarUsuarioPorEmail (String email);
+	
 	void remover(String id);
 	
+	String gerarSenha(String s);
 }

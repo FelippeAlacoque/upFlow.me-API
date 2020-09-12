@@ -2,8 +2,10 @@ package com.upflow.service.impl;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContextException;
 import org.springframework.stereotype.Service;
 
 import com.upflow.documents.Usuario;
@@ -42,6 +44,22 @@ public class UsuarioServiceImpl implements UsuarioService {
 	@Override
 	public void remover(String id) {		
 		this.usuarioRepository.deleteById(id);
+	}
+	
+	@Override
+	public String gerarSenha(String s) {
+		Random random = new Random();
+		int numero = random.nextInt(100);
+		return s+numero;
+	}
+	
+	@Override
+	public Usuario buscarUsuarioPorEmail(String email) {
+		Usuario user = this.usuarioRepository.findByEmail(email);
+		if(user == null)
+			throw new ApplicationContextException("Usuario não encontrado.");
+		
+		return user;		
 	}
 	
 	private void validarUsuarioSemelhante(Usuario usuario) throws UsuarioException {
