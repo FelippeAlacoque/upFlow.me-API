@@ -58,7 +58,7 @@ public class UsuarioController {
 			return ResponseEntity.badRequest().body(new Response<Usuario>(listaErros));
 		}		
 		return ResponseEntity.ok(new Response<Usuario>(this.usuarioService.cadastrar(usuario)));
-	}
+	}	
 	
 	@PutMapping(path = "/{id}")
 	@ApiOperation(value="Atualiza os dados um usuário (informando o ID)")
