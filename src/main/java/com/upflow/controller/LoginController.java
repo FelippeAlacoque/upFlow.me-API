@@ -2,6 +2,7 @@ package com.upflow.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -18,6 +19,7 @@ import com.mongodb.util.JSON;
 import com.upflow.DTO.LoginDTO;
 import com.upflow.documents.Usuario;
 import com.upflow.exception.UsuarioException;
+import com.upflow.repository.UsuarioRepository;
 import com.upflow.response.Response;
 import com.upflow.service.UsuarioService;
 
@@ -31,19 +33,23 @@ import io.swagger.annotations.ApiOperation;
 public class LoginController {
 	
 	@Autowired
-	private UsuarioService usuarioService;
+	private UsuarioRepository usuarioRepository;
 	
 	@PostMapping
 	@ApiOperation(value="Login de usuário")
-	public ResponseEntity<Response<Usuario>> logar(@Valid @RequestBody LoginDTO login, BindingResult result) throws UsuarioException{
-		if(result.hasErrors()) {
-			List<String> listaErros = new ArrayList<String>();
+	public ResponseEntity<Response<LoginDTO>> logar(@RequestBody LoginDTO login, BindingResult result) throws UsuarioException{
+		List<String> listaErros = new ArrayList<String>();
+		if(result.hasErrors()) {			
 			result.getAllErrors().forEach(erro -> listaErros.add(erro.getDefaultMessage()));
 			
-			return ResponseEntity.badRequest().body(new Response<Usuario>(listaErros));
+			return ResponseEntity.badRequest().body(new Response<LoginDTO>(listaErros));
+		}else {
+			Optional<Optional<Usuario>> usuario = Optional.of(usuarioRepository.findByLogin(login.getLogin()));
+			if(usuario.isPresent())
+				listaErros.add("Usuário não encontrado");
+			
+				return ResponseEntity.badRequest().body(new Response<LoginDTO>(listaErros));
 		}		
-		//return ResponseEntity.ok(new Response<Usuario>(this.usuarioService.cadastrar(usuario)));
-		return null;
 	}
 
 }
