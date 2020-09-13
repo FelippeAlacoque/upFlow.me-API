@@ -39,12 +39,12 @@ public class SendMailController {
 	@PostMapping
 	@ApiOperation(value="Envia e-mail")
 	public ResponseEntity<Response<Mensagem>> cadastrar(@Valid @RequestBody Mensagem mensagem, BindingResult result) throws UsuarioException{
-		if(result.hasErrors()) {
+		/*if(result.hasErrors()) {
 			List<String> listaErros = new ArrayList<String>();
 			result.getAllErrors().forEach(erro -> listaErros.add(erro.getDefaultMessage()));
 			
 			return ResponseEntity.badRequest().body(new Response<Mensagem>(listaErros));
-		}
+		}*/
 		//verificar se o e-mail cadastrado existe
 		Usuario usuario = usuarioService.buscarUsuarioPorEmail(mensagem.getEmail());
 		//gera nova senha para enviar por e-mail

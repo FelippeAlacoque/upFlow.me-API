@@ -18,6 +18,8 @@ public interface UsuarioService {
 	
 	Usuario buscarUsuarioPorEmail (String email);
 	
+	Usuario buscarUsuarioPorLogin (String login) throws UsuarioException;
+	
 	void remover(String id);
 	
 	String gerarSenha(String s);

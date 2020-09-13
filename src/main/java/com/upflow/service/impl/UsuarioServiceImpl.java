@@ -18,6 +18,15 @@ public class UsuarioServiceImpl implements UsuarioService {
 	
 	@Autowired
 	private UsuarioRepository usuarioRepository;
+	
+	@Override
+	public Usuario buscarUsuarioPorLogin(String login) throws UsuarioException {
+		Usuario usuario = usuarioRepository.findByLogin(login);
+		if(usuario == null)
+			throw new UsuarioException("Usuário não encontrado.");
+		else
+			return usuario;
+	}
 
 	@Override
 	public List<Usuario> listarTodos() {

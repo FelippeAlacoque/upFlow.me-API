@@ -2,7 +2,6 @@ package com.upflow.controller;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,8 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.upflow.DTO.LoginDTO;
 import com.upflow.documents.Usuario;
 import com.upflow.exception.UsuarioException;
-import com.upflow.repository.UsuarioRepository;
 import com.upflow.response.Response;
+import com.upflow.service.UsuarioService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -29,22 +28,19 @@ import io.swagger.annotations.ApiOperation;
 public class LoginController {
 	
 	@Autowired
-	private UsuarioRepository usuarioRepository;
+	private UsuarioService usuarioService;
 	
 	@PostMapping
 	@ApiOperation(value="Login de usuário")
-	public ResponseEntity<Response<LoginDTO>> logar(@RequestBody LoginDTO login, BindingResult result) throws UsuarioException{
+	public ResponseEntity<Response<Usuario>> logar(@RequestBody LoginDTO login, BindingResult result) throws UsuarioException{
 		List<String> listaErros = new ArrayList<String>();
 		if(result.hasErrors()) {			
 			result.getAllErrors().forEach(erro -> listaErros.add(erro.getDefaultMessage()));
 			
-			return ResponseEntity.badRequest().body(new Response<LoginDTO>(listaErros));
+			return ResponseEntity.badRequest().body(new Response<Usuario>(listaErros));
 		}else {
-			Optional<Optional<Usuario>> usuario = Optional.of(usuarioRepository.findByLogin(login.getLogin()));
-			if(usuario.isPresent())
-				listaErros.add("Usuário não encontrado");
-			
-				return ResponseEntity.badRequest().body(new Response<LoginDTO>(listaErros));
+			//validar se usuário está na base e login e senha informados conferem com os dados
+			return ResponseEntity.ok(new Response<Usuario>(this.usuarioService.buscarUsuarioPorLogin(login.getLogin())));
 		}		
 	}
 
